@@ -12,7 +12,7 @@ seqkit translate KW_cds_out.fa > KW_pep_out.fa
 ```
 
 I am just going to use the annotations on NCBI of [MHC genes from another annotation](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/9733/), extract them from my `KW_pep_out.fa`, and then use their positions to find the MHC genes out of `vcfs_JKL.vcf`
-	- There were 17 genes containing “Histocompatibility” in gene details, so just pulled them all as proteins
+- There were 17 genes containing “Histocompatibility” in gene details, so just pulled them all as proteins
 ```
 module load blast+/2.12.0
 makeblastdb -in mhc_prot_ncbi.faa -dbtype prot -out mhc_db
