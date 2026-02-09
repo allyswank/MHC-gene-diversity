@@ -2,22 +2,15 @@
 [will add more text here later] 
 
 
-### Isolate only vcf’s from SRKWs.
-```
-bcftools view   -S <(bcftools query -l vcf_files | grep -E '^[JKL]')   vcf_files   -o vcfs_JKL.vcf
-```
-### Extract all CDS regions from the genome so that I can annotate them and find MHC genes
-Use this python script that will pull the gene regions from the genome based on [Marty’s KW.gene.gff file](https://www.nature.com/articles/s41559-023-01995-0)
-```
-cds_maker.py
-```
+## Pulling MHC Genes
+Extract all CDS regions from the genome so that I can annotate them.
+- Run the `cds_maker.py` python script that will pull the gene regions from the genome based on [Marty’s KW.gene.gff file](https://www.nature.com/articles/s41559-023-01995-0)
+
 Translate the extracted CDS regions into proteins for BLAST. You could blast this whole `KW_pep_out.fa` file for complete annotations if you want!
 ```
 seqkit translate KW_cds_out.fa > KW_pep_out.fa 
 ```
 
-
-## Pulling MHC Genes
 I am just going to use the annotations on NCBI of [MHC genes from another annotation](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/9733/), extract them from my `KW_pep_out.fa`, and then use their positions to find the MHC genes out of `vcfs_JKL.vcf`
 	- There were 17 genes containing “Histocompatibility” in gene details, so just pulled them all as proteins
 ```
@@ -49,12 +42,18 @@ awk -v OFS="\t" '{print $1, $2-1, $3, $4}' mhc_coords.tmp > mhc_targets.bed
 ```
 
 ### 3. Finally, I will use bcftools to extract SNPs that fall within these MHC regions
+
+Isolate only vcf’s from SRKWs, and then pull SNPs from `mhc_targets.bed`.
+```
+bcftools view   -S <(bcftools query -l vcf_files | grep -E '^[JKL]')   vcf_files   -o vcfs_JKL.vcf
+```
 ```
 bcftools index vcfs_JKL.vcf.gz #index vcf
 bcftools view -R mhc_targets.bed vcfs_JKL.vcf.gz -o mhc_variants.vcf
 ```
 
 ## Nucleotide diversity
+
 Create separate files for J, K, and L matrilines
 ```
 bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[J]')   mhc_variants.vcf   -o mhc_J.vcf
