@@ -72,13 +72,13 @@ I then created `pos2gene.py` to take the outputs from `J_pi`, `K_pi`, and `L_pi`
 
 # Move to data analysis in `mhc_diversity.R`
 
-Plots for mean π across all genes by matrilines:
-<img width="100" height="95" alt="image" src="https://github.com/user-attachments/assets/d852527a-5765-45cc-b382-98679ddf3c4a" />
+### Plots for mean π across all genes by matrilines:
+<img width="1954" height="1316" alt="image" src="https://github.com/user-attachments/assets/d852527a-5765-45cc-b382-98679ddf3c4a" />
 
-Plots for each family's π by gene:
+### Plots for each family's π by gene:
 <img width="1954" height="1316" alt="image" src="https://github.com/user-attachments/assets/6247a6bb-c962-436a-b1c9-e83e55532d17" />
 
-Plot of rolling average π: 
+### Plot of rolling average π: 
 <img width="2824" height="1316" alt="image" src="https://github.com/user-attachments/assets/f0025a30-4862-4b21-907e-9885a821887f" />
 
 
