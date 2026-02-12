@@ -43,39 +43,28 @@ awk -v OFS="\t" '{print $1, $2-1, $3, $4}' mhc_coords.tmp > mhc_targets.bed
 
 ### 3. Finally, I will use bcftools to extract SNPs that fall within these MHC regions
 
-Isolate only vcf’s from SRKWs, and then pull SNPs from `mhc_targets.bed`.
+Pull SNPs in the `kw_151.snp.final.vcf.gz` from `mhc_targets.bed` for MHC gene diversity analysis
+
 ```
-bcftools view   -S <(bcftools query -l vcf_files | grep -E '^[JKL]')   vcf_files   -o vcfs_JKL.vcf
-```
-```
-bcftools index vcfs_JKL.vcf.gz #index vcf
-bcftools view -R mhc_targets.bed vcfs_JKL.vcf.gz -o mhc_variants.vcf
+bcftools index kw_151.snp.final.vcf.gz #index vcf
+bcftools view -R mhc_targets.bed kw_151.snp.final.vcf.gz -o mhc_variants.vcf
 ```
 
 ## Nucleotide diversity
 
-Create separate files for J, K, and L matrilines
-```
-bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[J]')   mhc_variants.vcf   -o mhc_J.vcf
-bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[K]')   mhc_variants.vcf   -o mhc_K.vcf
-bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[L]')   mhc_variants.vcf   -o mhc_L.vcf
-```
-
 Get nucleotide diversity for each matrilineal family
 ```
-vcftools --vcf mhc_J.vcf --site-pi --out J_pi
-vcftools --vcf mhc_K.vcf --site-pi --out K_pi
-vcftools --vcf mhc_L.vcf --site-pi --out L_pi
+vcftools --vcf mhc_variants.vcf --site-pi --out all_pi
 ```
 
-I then created `pos2gene.py` to take the outputs from `J_pi`, `K_pi`, and `L_pi` and figure out which annotated MHC genes the site positions are in. I ignored multiple isoforms because we cant actually tell which isoform is correct for each individual, so they are just duplicated scores.
+I then created `pos2gene.py` to take the output from `all_pi` and figure out which annotated MHC genes the site positions are in. I ignored multiple isoforms because we cant actually tell which isoform is correct for each individual, so they are just duplicated scores.
 
 # Move to data analysis in `mhc_diversity.R`
 
-### Plots for mean π across all genes by matrilines:
+### Plots for mean π across all genes by population:
 <img width="1954" height="1316" alt="image" src="https://github.com/user-attachments/assets/d852527a-5765-45cc-b382-98679ddf3c4a" />
 
-### Plots for each family's π by gene:
+### Plots for each population's π by gene:
 <img width="1954" height="1316" alt="image" src="https://github.com/user-attachments/assets/6247a6bb-c962-436a-b1c9-e83e55532d17" />
 
 ### Plot of rolling average π: 
