@@ -52,7 +52,7 @@ bcftools view -R mhc_targets.bed kw_151.snp.final.vcf.gz -o mhc_variants.vcf
 
 ## Nucleotide diversity
 
-Get nucleotide diversity for each matrilineal family
+Get nucleotide diversity using vcftools across all samples
 ```
 vcftools --vcf mhc_variants.vcf --site-pi --out all_pi
 ```
