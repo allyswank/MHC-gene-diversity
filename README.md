@@ -74,7 +74,7 @@ I then created `pos2gene.py` to take the output from `all_pi` and figure out whi
 # Move to data analysis in `mhc_diversity.R`
 
 ### Plots for mean π across all genes by population:
-<img width="1520" height="1512" alt="image" src="https://github.com/user-attachments/assets/7f0dd1e9-dd2f-40d4-8823-1eaee9912f94" />
+<img width="900" height="900" alt="image" src="https://github.com/user-attachments/assets/7f0dd1e9-dd2f-40d4-8823-1eaee9912f94" />
 
 
 ### Plots for each population's π by gene:
