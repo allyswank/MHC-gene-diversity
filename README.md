@@ -52,9 +52,21 @@ bcftools view -R mhc_targets.bed kw_151.snp.final.vcf.gz -o mhc_variants.vcf
 
 ## Nucleotide diversity
 
-Get nucleotide diversity using vcftools across all samples
+Get nucleotide diversity using vcftools across each population to be analyzed separately in R
 ```
-vcftools --vcf mhc_variants.vcf --site-pi --out all_pi
+bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[J]')   mhc_variants.vcf   -o mhc_J.vcf #SRKW - N = 32
+bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[K]')   mhc_variants.vcf   -o mhc_K.vcf #SRKW - N = 22
+bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[L]')   mhc_variants.vcf   -o mhc_L.vcf #SRKW - N = 47
+bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[T]')   mhc_variants.vcf   -o mhc_TKW.vcf #Transients - N = 11
+bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[P]')   mhc_variants.vcf   -o mhc_AKW.vcf #ARKW - N = 24
+bcftools view   -S <(bcftools query -l mhc_variants.vcf | grep -E '^[o]')   mhc_variants.vcf   -o mhc_off.vcf #offshore - N = 4
+
+vcftools --vcf mhc_J.vcf --site-pi --out J_pi
+vcftools --vcf mhc_K.vcf --site-pi --out K_pi
+vcftools --vcf mhc_L.vcf --site-pi --out L_pi
+vcftools --vcf mhc_TKW.vcf --site-pi --out TKW_pi
+vcftools --vcf mhc_AKW.vcf --site-pi --out AKW_pi
+vcftools --vcf mhc_off.vcf --site-pi --out off_pi
 ```
 
 I then created `pos2gene.py` to take the output from `all_pi` and figure out which annotated MHC genes the site positions are in. I ignored multiple isoforms because we cant actually tell which isoform is correct for each individual, so they are just duplicated scores.
@@ -62,13 +74,16 @@ I then created `pos2gene.py` to take the output from `all_pi` and figure out whi
 # Move to data analysis in `mhc_diversity.R`
 
 ### Plots for mean π across all genes by population:
-<img width="1954" height="1316" alt="image" src="https://github.com/user-attachments/assets/d852527a-5765-45cc-b382-98679ddf3c4a" />
+<img width="1520" height="1512" alt="image" src="https://github.com/user-attachments/assets/7f0dd1e9-dd2f-40d4-8823-1eaee9912f94" />
+
 
 ### Plots for each population's π by gene:
-<img width="1954" height="1316" alt="image" src="https://github.com/user-attachments/assets/6247a6bb-c962-436a-b1c9-e83e55532d17" />
+<img width="1520" height="1512" alt="image" src="https://github.com/user-attachments/assets/6d1ca385-dc58-4384-9601-2f978aeb62d1" />
+
 
 ### Plot of rolling average π: 
-<img width="2824" height="1316" alt="image" src="https://github.com/user-attachments/assets/f0025a30-4862-4b21-907e-9885a821887f" />
+<img width="2706" height="1512" alt="image" src="https://github.com/user-attachments/assets/687a6674-dfb8-4b5d-88d1-e93d864a615e" />
+
 
 
 
