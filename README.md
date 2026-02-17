@@ -84,6 +84,13 @@ I then created `pos2gene.py` to take the output from `all_pi` and figure out whi
 ### Plot of rolling average π: 
 <img width="2706" height="1512" alt="image" src="https://github.com/user-attachments/assets/687a6674-dfb8-4b5d-88d1-e93d864a615e" />
 
+## Focusing only on MHC class II
+### Plot of rolling average π:
+<img width="2764" height="1010" alt="image" src="https://github.com/user-attachments/assets/3840e938-44f3-4206-aa84-19631185f34c" />
+
+### Plot of mean π for each population: 
+<img width="1252" height="1010" alt="image" src="https://github.com/user-attachments/assets/3f99ae1d-a27f-4226-ada3-487fa76bd774" />
+
 
 
 
