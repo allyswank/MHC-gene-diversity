@@ -93,6 +93,43 @@ Starting with filtering per site:
 ## Genetic differentiation between samples
 <img width="761" height="436" alt="image" src="https://github.com/user-attachments/assets/e9849c97-8088-4331-b44a-6f79fe316d9f" />
 
+## Haplotype inference
+
+First I will need to take my multi-sample vcf and create one diploid consensus fasta per gene per individual. At this point, the data are still unphased and heterozygous sites are still unresolved. 
+
+```
+# make a gatk genome dict file and index the vcf
+gatk CreateSequenceDictionary -R genome.fa -O genome.dict
+gatk IndexFeatureFile --input mhc_depth_filtered.vcf.gz
+
+samples=$(bcftools query -l mhc_depth_filtered.vcf.gz) #this will loop through each sample
+
+for sample in $samples; do
+    gatk SelectVariants -V mhc_depth_filtered.vcf.gz -sn $sample -O ${sample}.vcf.gz
+    gatk FastaAlternateReferenceMaker -R genome.fa -V ${sample}.vcf.gz -O ${sample}.fa -L mhc_exons.bed
+done
+```
+
+Do a quick check to make sure the fasta's look right, and then run PHASE to resolve heterozygote allele frequencies. 
+
+```
+# convert these fasta alignments to PHASE format using SeqPHASE
+for sample in $samples; do
+    java -jar SeqPHASE.jar -fasta -in ${sample}.fa -out ${sample}.phase
+done
+
+# run PHASE
+for sample in $samples; do
+    phase ${sample}.phase -X10 -MR
+done
+
+# convert phased output back to fasta format
+for sample in $samples; do
+    java -jar SeqPHASE.jar -phaseout -in ${sample}.phase.out -out ${sample}_phased.fa
+done
+```
+
+
 
 ## Nucleotide diversity
 
