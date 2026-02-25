@@ -50,6 +50,17 @@ bcftools index kw_151.snp.final.vcf.bgzf.gz #index vcf
 bcftools view -R mhc_exons.bed kw_151.snp.final.vcf.bgzf.gz -Oz -o mhc_exon_variants.vcf.gz
 bcftools index mhc_exon_variants.vcf.gz #index output
 ```
+### 4. Filter the SNPs 
+
+I only want to include biallelic sites with high quality scores. This decreases noise downstream and seems to be appropriate according to findings in other cetaceans (Heimeier et al.). 
+
+```
+view -m2 -M2 -v snps mhc_exon_variants.vcf.gz -Oz -o mhc_exon_biallelic_snps.vcf.gz # get biallelic
+
+bcftools filter -e 'QUAL<80 || MQ<40 || MQRankSum>12.5 || MQRankSum<-12.5 || ReadPosRankSum>8 || ReadPosRankSum<-8' \
+  mhc_exon_biallelic_snps.vcf.gz -Oz -o mhc_exon_filtered.vcf.gz
+```
+
 
 ## Nucleotide diversity
 
