@@ -90,6 +90,9 @@ Now vcftools can calculate allelic balance per site or per genotype. Per site is
 Starting with filtering per site:
 
 
+## Genetic differentiation between samples
+<img width="761" height="436" alt="image" src="https://github.com/user-attachments/assets/e9849c97-8088-4331-b44a-6f79fe316d9f" />
+
 
 ## Nucleotide diversity
 
