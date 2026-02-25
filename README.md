@@ -30,15 +30,15 @@ We want the mRNA line for each hit so that we have the full gene start/end range
 #First finding unique gene IDs from the `mhc_hits_filtered` file.
 cut -f1 mhc_hits_filtered | sort -u > mhc_gene_ids
 
-#Find the mRNA coordinates from these mhc_gene_ids from the gff file.
-grep -f mhc_gene_ids KW.gene.gff | awk '$3=="mRNA"' | cut -f1,4,5,9 > mhc_coords.tmp
+#Find the CDS coordinates from these mhc_gene_ids from the gff file.
+grep -f mhc_gene_ids KW.gene.gff | awk '$3=="CDS"' > mhc_cds_features.gff
 ```
 
 ### 2. Format `mhc_coords.temp` into a bed file format
 VCFtools needs (car, start, end) format
 Bed uses 0-based starts, so this will also subtract 1 from GFF start coordinates
 ```
-awk -v OFS="\t" '{print $1, $2-1, $3, $4}' mhc_coords.tmp > mhc_targets.bed
+awk -v OFS="\t" '{print $1, $4-1, $5, $9}' mhc_cds_features.gff > mhc_exons.bed
 ```
 
 ### 3. Finally, I will use bcftools to extract SNPs that fall within these MHC regions
@@ -46,8 +46,9 @@ awk -v OFS="\t" '{print $1, $2-1, $3, $4}' mhc_coords.tmp > mhc_targets.bed
 Pull SNPs in the `kw_151.snp.final.vcf.gz` from `mhc_targets.bed` for MHC gene diversity analysis
 
 ```
-bcftools index kw_151.snp.final.vcf.gz #index vcf
-bcftools view -R mhc_targets.bed kw_151.snp.final.vcf.gz -o mhc_variants.vcf
+bcftools index kw_151.snp.final.vcf.bgzf.gz #index vcf
+bcftools view -R mhc_exons.bed kw_151.snp.final.vcf.bgzf.gz -Oz -o mhc_exon_variants.vcf.gz
+bcftools index mhc_exon_variants.vcf.gz #index output
 ```
 
 ## Nucleotide diversity
