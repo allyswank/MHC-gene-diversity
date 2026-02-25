@@ -91,7 +91,8 @@ Starting with filtering per site:
 
 
 ## Genetic differentiation between samples
-<img width="761" height="436" alt="image" src="https://github.com/user-attachments/assets/e9849c97-8088-4331-b44a-6f79fe316d9f" />
+<img width="761" height="436" alt="image" src="https://github.com/user-attachments/assets/9a9689bf-8049-4ca1-b5a7-32e7f60b7831" />
+
 
 ## Haplotype inference
 
@@ -152,22 +153,15 @@ I then created `pos2gene.py` to take the output from `#_pi` and figure out which
 # Move to data analysis in `mhc_diversity.R`
 
 ### Plots for mean π across all genes by population:
-<img width="900" height="900" alt="image" src="https://github.com/user-attachments/assets/7f0dd1e9-dd2f-40d4-8823-1eaee9912f94" />
-
+<img width="760" height="588" alt="image" src="https://github.com/user-attachments/assets/aed8eaac-bf47-4ca1-8299-5314c048fdb1" />
 
 ### Plots for each population's π by gene:
-<img width="1520" height="1512" alt="image" src="https://github.com/user-attachments/assets/6d1ca385-dc58-4384-9601-2f978aeb62d1" />
-
-
-### Plot of rolling average π: 
-<img width="2706" height="1512" alt="image" src="https://github.com/user-attachments/assets/687a6674-dfb8-4b5d-88d1-e93d864a615e" />
+<img width="760" height="588" alt="image" src="https://github.com/user-attachments/assets/658e6adf-8445-4c19-91ea-f4c1a46a8949" />
 
 ## Focusing only on MHC class II
-### Plot of rolling average π:
-<img width="2764" height="1010" alt="image" src="https://github.com/user-attachments/assets/3840e938-44f3-4206-aa84-19631185f34c" />
-
 ### Plot of mean π for each population: 
-<img width="1252" height="1010" alt="image" src="https://github.com/user-attachments/assets/3f99ae1d-a27f-4226-ada3-487fa76bd774" />
+<img width="760" height="588" alt="image" src="https://github.com/user-attachments/assets/81084078-c8fd-4ead-94e5-ad10707d3463" />
+<img width="760" height="588" alt="image" src="https://github.com/user-attachments/assets/9b0b60e5-106b-4837-bfd6-a0e005bbb21b" />
 
 
 
