@@ -95,18 +95,13 @@ Starting with filtering per site:
 
 Get nucleotide diversity using vcftools across each population to be analyzed separately in R
 ```
-bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[J]')   mhc_depth_filtered.vcf.gz   -o mhc_J.vcf #SRKW - N = 32
-bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[K]')   mhc_depth_filtered.vcf.gz   -o mhc_K.vcf #SRKW - N = 22
-bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[L]')   mhc_depth_filtered.vcf.gz   -o mhc_L.vcf #SRKW - N = 47
-bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[calf|neo]')   mhc_depth_filtered.vcf.gz   -o mhc_srkwextras.vcf #SRKW - N = 2
-bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[T|MBH]')   mhc_depth_filtered.vcf.gz   -o mhc_TKW.vcf #Transients - N = 11
-bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[P|AKW13]')   mhc_depth_filtered.vcf.gz   -o mhc_AKW.vcf #ARKW - N = 24
-bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[o|AWK04|NG]')   mhc_depth_filtered.vcf.gz   -o mhc_off.vcf #offshore - N = 4
+bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[J|K|L|calf|neo]')   mhc_depth_filtered.vcf.gz   -o mhc_srkw.vcf #SRKW - N = 
+bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[T|MBH]')   mhc_depth_filtered.vcf.gz   -o mhc_TKW.vcf #Transients - N = 
+bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[P|AKW13]')   mhc_depth_filtered.vcf.gz   -o mhc_AKW.vcf #ARKW - N = 
+bcftools view   -S <(bcftools query -l mhc_depth_filtered.vcf.gz | grep -E '^[o|AWK04|NG]')   mhc_depth_filtered.vcf.gz   -o mhc_off.vcf #offshore - N = 
 
-vcftools --vcf mhc_J.vcf --site-pi --out J_pi
-vcftools --vcf mhc_K.vcf --site-pi --out K_pi
-vcftools --vcf mhc_L.vcf --site-pi --out L_pi
-vcftools --vcf mhc_srkwextras.vcf --site-pi --out srkwextras_pi
+
+vcftools --vcf mhc_srkw.vcf --site-pi --out srkw_pi
 vcftools --vcf mhc_TKW.vcf --site-pi --out TKW_pi
 vcftools --vcf mhc_AKW.vcf --site-pi --out AKW_pi
 vcftools --vcf mhc_off.vcf --site-pi --out off_pi
