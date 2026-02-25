@@ -59,7 +59,36 @@ view -m2 -M2 -v snps mhc_exon_variants.vcf.gz -Oz -o mhc_exon_biallelic_snps.vcf
 
 bcftools filter -e 'QUAL<80 || MQ<40 || MQRankSum>12.5 || MQRankSum<-12.5 || ReadPosRankSum>8 || ReadPosRankSum<-8' \
   mhc_exon_biallelic_snps.vcf.gz -Oz -o mhc_exon_filtered.vcf.gz
+bcftools view -f PASS mhc_exon_filtered.vcf.gz -Oz -o mhc_exon_filtered_PASS.vcf.gz #keep only passing sites
+bcftools index mhc_exon_filtered_PASS.vcf.gz
+
+# Sanity check: get number of sites
+bcftools view -H mhc_exon_filtered_PASS.vcf.gz | wc -l 
+#257 - only lost 6 sites from mhc_exon_biallelic_snps.vcf
 ```
+
+I also want to calculate depth for each genotype and remove sites with low sequencing depth (<5x). 
+
+```
+bcftools filter -e 'MEAN(FORMAT/DP) < 5' mhc_exon_filtered_PASS.vcf.gz -Oz -o mhc_depth_filtered.vcf.gz
+bcftools index mhc_depth_filtered.vcf.gz
+
+bcftools view -H mhc_depth_filtered.vcf.gz | wc -l
+#254 - only lost 3 with lower than 5x coverage
+```
+
+For heterozygous sites, I will filter for allelic imbalance where one allele represents <10% or >90% of reads.
+
+First, export per-site AD (ref/alt counts) for each sample with vcftools.
+
+```
+vcftools --gzvcf mhc_depth_filtered.vcf.gz --get-INFO AD --out mhc_AD
+```
+
+Now vcftools can calculate allelic balance per site or per genotype. Per site is a lot more strict (one bad samples ruins the site for everyone) and per genotype is looser (only removes that site for the one sample that is imbalanced). I will try both strict and loose. 
+
+Starting with filtering per site:
+
 
 
 ## Nucleotide diversity
