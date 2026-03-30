@@ -91,7 +91,7 @@ Starting with filtering per site:
 
 
 ## Genetic differentiation between samples
-<img width="761" height="436" alt="image" src="https://github.com/user-attachments/assets/9a9689bf-8049-4ca1-b5a7-32e7f60b7831" />
+<img width="1401" height="737" alt="image" src="https://github.com/user-attachments/assets/547489af-a9eb-4ce9-843d-e0387164b45d" />
 
 
 ## Haplotype inference
