@@ -77,21 +77,26 @@ bcftools view -H mhc_depth_filtered.vcf.gz | wc -l
 #254 - only lost 3 with lower than 5x coverage
 ```
 
-For heterozygous sites, I will filter for allelic imbalance where one allele represents <10% or >90% of reads.
-
-First, export per-site AD (ref/alt counts) for each sample with vcftools.
+For heterozygous sites, I will filter for allelic imbalance where one allele represents <10% or >90% of reads. I am filtering AB per genotype rather than per site so that I don't lose good data across all samples just because a site is bad in one sample.
 
 ```
-vcftools --gzvcf mhc_depth_filtered.vcf.gz --get-INFO AD --out mhc_AD
+# Calculate AB with gatk (AF is the same as AB here)
+gatk VariantAnnotator -R genome.fa -V mhc_depth_filtered.vcf.gz -O mhc_depth_filtered_AB.vcf.gz -A AlleleFraction
+
+# Use bcftools to mask heterozygotes with allelic imbalance
+bcftools +setGT mhc_depth_filtered_AB.vcf.gz -- -t q -i 'GT="0/1" && (FMT/AF<0.1 || FMT/AF>0.9)' -n . | bcftools view -O z -o mhc_ab_filtered.vcf.gz #Filled 74844 alleles
+
+# Look at per site missingness
+bcftools +fill-tags mhc_ab_filtered.vcf.gz -- -t F_MISSING | bcftools view -O z -o mhc_ab_filtered_tags.vcf.gz
+bcftools query -f '%CHROM\t%POS\t%F_MISSING\n' mhc_ab_filtered_tags.vcf.gz | head
+
 ```
-
-Now vcftools can calculate allelic balance per site or per genotype. Per site is a lot more strict (one bad samples ruins the site for everyone) and per genotype is looser (only removes that site for the one sample that is imbalanced). I will try both strict and loose. 
-
-Starting with filtering per site:
+This section ^^^^ with AB filtering is resulting in a ton of missingness so I need to look into this more.
 
 
 ## Genetic differentiation between samples
 <img width="1401" height="737" alt="image" src="https://github.com/user-attachments/assets/547489af-a9eb-4ce9-843d-e0387164b45d" />
+This is using the mhc_depth_filtered.vcf.gz file.
 
 
 ## Haplotype inference
@@ -111,7 +116,7 @@ for sample in $samples; do
 done
 ```
 
-Do a quick check to make sure the fasta's look right, and then run PHASE to resolve heterozygote allele frequencies. 
+Do a quick check to make sure the fasta's look right for each sample, and then run PHASE to resolve heterozygote allele frequencies. I am having trouble getting this to work - will return to haplotype calling later.
 
 ```
 # convert these fasta alignments to PHASE format using SeqPHASE
@@ -130,6 +135,8 @@ for sample in $samples; do
 done
 ```
 
+## Identify non-synonomous mutations
+I want to do this after phasing. Can then evaluate how specific regions might carry functional changes in a population.
 
 
 ## Nucleotide diversity
