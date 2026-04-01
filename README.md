@@ -84,19 +84,19 @@ For heterozygous sites, I will filter for allelic imbalance where one allele rep
 gatk VariantAnnotator -R genome.fa -V mhc_depth_filtered.vcf.gz -O mhc_depth_filtered_AB.vcf.gz -A AlleleFraction
 
 # Use bcftools to mask heterozygotes with allelic imbalance
-bcftools +setGT mhc_depth_filtered_AB.vcf.gz -- -t q -i 'GT="0/1" && (FMT/AF<0.1 || FMT/AF>0.9)' -n . | bcftools view -O z -o mhc_ab_filtered.vcf.gz #Filled 74844 alleles
+bcftools view -i 'GT="0/1" && (FMT/AF>0.1 || FMT/AF<0.9)' mhc_depth_filtered_AB.vcf.gz > mhc_ab_filtered.vcf
 
 # Look at per site missingness
 bcftools +fill-tags mhc_ab_filtered.vcf.gz -- -t F_MISSING | bcftools view -O z -o mhc_ab_filtered_tags.vcf.gz
-bcftools query -f '%CHROM\t%POS\t%F_MISSING\n' mhc_ab_filtered_tags.vcf.gz | head
-
+bcftools query -f '%CHROM\t%POS\t%F_MISSING\n' mhc_ab_filtered_tags.vcf.gz
+    # Only 2 sites with 12% missingness - all other sites <2% missingness.
 ```
-This section ^^^^ with AB filtering is resulting in a ton of missingness so I need to look into this more.
+
 
 
 ## Genetic differentiation between samples
-<img width="1401" height="737" alt="image" src="https://github.com/user-attachments/assets/547489af-a9eb-4ce9-843d-e0387164b45d" />
-This is using the mhc_depth_filtered.vcf.gz file.
+<img width="1401" height="737" alt="image" src="https://github.com/user-attachments/assets/c3880387-e894-460a-b39a-c368f0d6ff64" />
+This is using the mhc_ab_filtered.vcf.gz file.
 
 
 ## Haplotype inference
@@ -106,12 +106,12 @@ First I will need to take my multi-sample vcf and create one diploid consensus f
 ```
 # make a gatk genome dict file and index the vcf
 gatk CreateSequenceDictionary -R genome.fa -O genome.dict
-gatk IndexFeatureFile --input mhc_depth_filtered.vcf.gz
+gatk IndexFeatureFile --input mhc_ab_filtered.vcf.gz
 
-samples=$(bcftools query -l mhc_depth_filtered.vcf.gz) #this will loop through each sample
+samples=$(bcftools query -l mhc_ab_filtered.vcf.gz) #this will loop through each sample
 
 for sample in $samples; do
-    gatk SelectVariants -V mhc_depth_filtered.vcf.gz -sn $sample -O ${sample}.vcf.gz
+    gatk SelectVariants -V mhc_ab_filtered.vcf.gz -sn $sample -O ${sample}.vcf.gz
     gatk FastaAlternateReferenceMaker -R genome.fa -V ${sample}.vcf.gz -O ${sample}.fa -L mhc_exons.bed
 done
 ```
