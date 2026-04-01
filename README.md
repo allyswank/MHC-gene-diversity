@@ -120,8 +120,9 @@ Do a quick check to make sure the fasta's look right for each sample, and then r
 
 ```
 # convert these fasta alignments to PHASE format using SeqPHASE
+samples=$(bcftools query -l mhc_ab_filtered.vcf.gz)
 for sample in $samples; do
-    java -jar SeqPHASE.jar -fasta -in ${sample}.fa -out ${sample}.phase
+    python3 ./SeqPHASE/seqphase1.py -1 ${sample}.fa
 done
 
 # run PHASE
