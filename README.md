@@ -101,7 +101,7 @@ This is using the mhc_ab_filtered.vcf.gz file.
 
 ## Haplotype inference
 
-First I will need to take my multi-sample vcf and create one diploid consensus fasta per gene per individual. At this point, the data are still unphased and heterozygous sites are still unresolved. 
+First I will need to take my multi-sample vcf and create one diploid consensus fasta per gene per individual. I will then merge all exons within class II loci into one sequence per sample and make a fasta file for each gene where each fasta sequence is from one individual. At this point, the data are still unphased and heterozygous sites are still unresolved. 
 
 ```
 # make a gatk genome dict file and index the vcf
@@ -114,15 +114,16 @@ for sample in $samples; do
     gatk SelectVariants -V mhc_ab_filtered.vcf.gz -sn $sample -O ${sample}.vcf.gz
     gatk FastaAlternateReferenceMaker -R genome.fa -V ${sample}.vcf.gz -O ${sample}.fa -L mhc_exons.bed --use-iupac-sample $sample
 done
+
+python3 make_loci_fastas
 ```
 
-Do a quick check to make sure the fasta's look right for each sample, and then run PHASE to resolve heterozygote allele frequencies. I am having trouble getting this to work - will return to haplotype calling later.
+Do a quick check to make sure the fasta's look right for each loci (Ex.: `seqkit stats DRA.fa`, all loci should be same number of bp's), and then run PHASE to resolve heterozygote allele frequencies. 
 
 ```
 # convert these fasta alignments to PHASE format using SeqPHASE
-samples=$(bcftools query -l mhc_ab_filtered.vcf.gz)
-for sample in $samples; do
-    python3 ./SeqPHASE/seqphase1.py -1 ${sample}.fa
+for gene in `ls *.fa`; do
+    python3 ../SeqPHASE/seqphase1.py -1 ${gene}.fa
 done
 
 # run PHASE
