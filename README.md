@@ -112,7 +112,7 @@ samples=$(bcftools query -l mhc_ab_filtered.vcf.gz) #this will loop through each
 
 for sample in $samples; do
     gatk SelectVariants -V mhc_ab_filtered.vcf.gz -sn $sample -O ${sample}.vcf.gz
-    gatk FastaAlternateReferenceMaker -R genome.fa -V ${sample}.vcf.gz -O ${sample}.fa -L mhc_exons.bed
+    gatk FastaAlternateReferenceMaker -R genome.fa -V ${sample}.vcf.gz -O ${sample}.fa -L mhc_exons.bed --use-iupac-sample $sample
 done
 ```
 
