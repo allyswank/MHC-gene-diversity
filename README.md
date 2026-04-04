@@ -116,6 +116,11 @@ for sample in $samples; do
 done
 
 python3 make_loci_fastas
+
+# Fix headers for PHASE
+sed -i '/^>/s/ /_/g' DOB.fa 
+sed -i '/^>/s/.fa/_/g' DOB.fa
+sed -i '/^[^>]/s/\./N/g' DOB.fa # change "." to "N" in sequences
 ```
 
 Do a quick check to make sure the fasta's look right for each loci (Ex.: `seqkit stats DRA.fa`, all loci should be same number of bp's), and then run PHASE to resolve heterozygote allele frequencies. 
@@ -123,17 +128,17 @@ Do a quick check to make sure the fasta's look right for each loci (Ex.: `seqkit
 ```
 # convert these fasta alignments to PHASE format using SeqPHASE
 for gene in `ls *.fa`; do
-    python3 ../SeqPHASE/seqphase1.py -1 ${gene}.fa
+    python3 ../SeqPHASE/seqphase1.py -1 ${gene} -o ${gene}
 done
 
 # run PHASE
-for sample in $samples; do
-    phase ${sample}.phase -X10 -MR
+for gene in `ls *.fa`; do
+    ../phase/PHASE ${gene}.inp ${gene}.out 100 1 100 -X10 -MR
 done
 
 # convert phased output back to fasta format
-for sample in $samples; do
-    java -jar SeqPHASE.jar -phaseout -in ${sample}.phase.out -out ${sample}_phased.fa
+for gene in `ls *.fa`; do
+    python3 ../SeqPHASE/seqphase2.py -i ${gene}.out -c ${gene}.const -o ${gene}_phased.fa
 done
 ```
 
