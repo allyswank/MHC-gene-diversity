@@ -142,6 +142,30 @@ for gene in `ls *.fa`; do
 done
 ```
 
+Now that phasing is complete, we can do final filtering and begin data analysis. I will start by removing unresolved alleles and those with a frequency less than 2% of the dataset.
+
+```
+# find any unresolved alleles
+for gene in `ls *_phased.fa`; do
+  seqkit grep -s -r -p "[NRYKMSWBDHV.]" ${gene} > ${gene}_unresolved.fa
+done
+
+# keep only alleles that are fully resolved for the rest of analysis
+for gene in `ls *_phased.fa`; do
+  seqkit grep -vs -r -p "[NRYKMSWBDHV.]" ${gene} > ${gene}_clean.fa
+done
+
+# get rid of alleles if the individuals had one but not both of their alleles filtered
+for gene in *_clean.fa; do
+  grep "^>" "$gene" | sed 's/^>_//' | cut -d'_' -f1 | sort | uniq -c | awk '$1==2 {print $2}' > keep_ids
+  awk '{print "^_"$1"_"}' keep_ids > keep_patterns #make sure id will match fasta header
+  seqkit grep -n -r -f keep_patterns "$gene" > "${gene}_paired.fa"
+done
+```
+I also renamed these files so that they are just (gene-name)_paired.fa 
+
+
+
 ## Identify non-synonomous mutations
 I want to do this after phasing. Can then evaluate how specific regions might carry functional changes in a population.
 
