@@ -222,6 +222,8 @@ for f in *_final.fa; do
 done
 ```
 Haplotype network analysis in `mhc_haplotypes.R`!
+<img width="2116" height="1340" alt="image" src="https://github.com/user-attachments/assets/2d0b867c-bbb3-43bc-8798-67ce47d90226" />
+
 
 ## Identify non-synonomous mutations
 I want to do this after phasing. Can then evaluate how specific regions might carry functional changes in a population.
