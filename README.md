@@ -222,7 +222,7 @@ for f in *_final.fa; do
 done
 ```
 Haplotype network analysis in `mhc_haplotypes.R`!
-<img width="2116" height="1340" alt="image" src="https://github.com/user-attachments/assets/2d0b867c-bbb3-43bc-8798-67ce47d90226" />
+<img width="970" height="649" alt="Screenshot 2026-04-06 at 11 30 13 PM" src="https://github.com/user-attachments/assets/f86676ef-495b-4a5a-b851-8f9492823e1b" />
 
 
 ## Identify non-synonomous mutations
