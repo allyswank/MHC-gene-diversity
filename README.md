@@ -147,12 +147,12 @@ Now that phasing is complete, we can do final filtering and begin data analysis.
 ```
 # find any unresolved alleles
 for gene in `ls *_phased.fa`; do
-  seqkit grep -s -r -p "[NRYKMSWBDHV.]" ${gene} > ${gene}_unresolved.fa
+  seqkit grep -s -r -p "[NKMSWBDHV.]" ${gene} > ${gene}_unresolved.fa
 done
 
-# keep only alleles that are fully resolved for the rest of analysis
+# keep only alleles that are fully resolved for the rest of analysis (keeping R [Purine (A or G)] and Y [Pyrimidine (C or T)])
 for gene in `ls *_phased.fa`; do
-  seqkit grep -vs -r -p "[NRYKMSWBDHV.]" ${gene} > ${gene}_clean.fa
+  seqkit grep -vs -r -p "[NKMSWBDHV.]" ${gene} > ${gene}_clean.fa
 done
 
 # get rid of alleles if the individuals had one but not both of their alleles filtered
@@ -161,10 +161,13 @@ for gene in *_clean.fa; do
   awk '{print "^_"$1"_"}' keep_ids > keep_patterns #make sure id will match fasta header
   seqkit grep -n -r -f keep_patterns "$gene" > "${gene}_paired.fa"
 done
-```
-I also renamed these files so that they are just (gene-name)_paired.fa 
 
-```
+#I also renamed these files so that they are just (gene-name)_paired.fa 
+for f in *_paired.fa; do
+    base="${f%%.*}"
+    mv "$f" "${base}_paired.fa"
+done
+
 # identify unique alleles and count how many times we see each one
 for gene in `ls *_paired.fa`; do
   seqkit rmdup -s -D ${gene}_dup_counts ${gene} > ${gene}_unique.fa
@@ -185,7 +188,7 @@ done
 
 # filter alleles with low frequencies
 for gene in *_paired.fa; do
-  awk '$3 > 0.02' "${gene}_freqs" > "${gene}_freqs_filtered"
+  awk '$3 > 0.01' "${gene}_freqs" > "${gene}_freqs_filtered"
 done
 
 # check remaining number of alleles for each gene
@@ -193,11 +196,11 @@ for f in *_freqs_filtered; do
   echo "$f alleles: $(wc -l < "$f")"
 done
 ```
-DMB_paired.fa_freqs_filtered alleles: 2
-DOA_paired.fa_freqs_filtered alleles: 3
+DMB_paired.fa_freqs_filtered alleles: 3
+DOA_paired.fa_freqs_filtered alleles: 7
 DOB_paired.fa_freqs_filtered alleles: 3
 DRA_paired.fa_freqs_filtered alleles: 4
-DRB_11_paired.fa_freqs_filtered alleles: 10
+DRB_11_paired.fa_freqs_filtered alleles: 15
 DRB_15_paired.fa_freqs_filtered alleles: 3
 
 ```
@@ -219,6 +222,12 @@ done
 for f in *_final.fa; do
   echo $f
   grep "^>" $f | sed 's/^>_//' | cut -d'_' -f1 | sort | uniq -c | awk '$1!=2'
+done
+
+#rename final files
+for f in *_final.fa; do
+    base="${f%%.*}"
+    mv "$f" "${base}_hapfinal.fa"
 done
 ```
 Haplotype network analysis in `mhc_haplotypes.R`!
