@@ -186,48 +186,15 @@ for gene in *_paired.fa; do
   awk '{freq=$1/'"$total"'; print $1, $2, freq}' "${gene}_dup_counts" > "${gene}_freqs"
 done
 
-# filter alleles with low frequencies
-for gene in *_paired.fa; do
-  awk '$3 > 0.01' "${gene}_freqs" > "${gene}_freqs_filtered"
-done
-
 # check remaining number of alleles for each gene
-for f in *_freqs_filtered; do
+for f in *_freqs; do
   echo "$f alleles: $(wc -l < "$f")"
-done
-```
-DMB_paired.fa_freqs_filtered alleles: 3
-DOA_paired.fa_freqs_filtered alleles: 7
-DOB_paired.fa_freqs_filtered alleles: 3
-DRA_paired.fa_freqs_filtered alleles: 4
-DRB_11_paired.fa_freqs_filtered alleles: 15
-DRB_15_paired.fa_freqs_filtered alleles: 3
-
-```
-# change back to fasta format from freqs_filtered 
-for gene in *_paired.fa; do
-  awk '{gsub(",",""); print $2}' "${gene}_freqs_filtered" > keep_ids
-  seqkit grep -n -f keep_ids "${gene}_unique.fa" | seqkit seq -s > keep_seqs
-  seqkit grep -s -f keep_seqs "$gene" > "${gene}_haplotypes.fa"
-done
-
-# remove individuals with only one allele again
-for gene in *_haplotypes.fa; do
-  grep "^>" "$gene" | sed 's/^>_//' | cut -d'_' -f1 | sort | uniq -c | awk '$1==2 {print $2}' > keep_ids
-  awk '{print "^_"$1"_"}' keep_ids > keep_patterns
-  seqkit grep -n -r -f keep_patterns "$gene" > "${gene}_final.fa"
 done
 
 # check that all individuals only have a/b alleles (diploid)
-for f in *_final.fa; do
+for f in *_paired.fa; do
   echo $f
   grep "^>" $f | sed 's/^>_//' | cut -d'_' -f1 | sort | uniq -c | awk '$1!=2'
-done
-
-#rename final files
-for f in *_final.fa; do
-    base="${f%%.*}"
-    mv "$f" "${base}_hapfinal.fa"
 done
 ```
 Haplotype network analysis in `mhc_haplotypes.R`!
