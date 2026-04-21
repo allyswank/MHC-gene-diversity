@@ -191,6 +191,13 @@ for f in *_freqs; do
   echo "$f alleles: $(wc -l < "$f")"
 done
 
+DMB_paired.fa_freqs alleles: 4
+DOA_paired.fa_freqs alleles: 11
+DOB_paired.fa_freqs alleles: 4
+DRA_paired.fa_freqs alleles: 6
+DRB_11_paired.fa_freqs alleles: 23
+DRB_15_paired.fa_freqs alleles: 3
+
 # check that all individuals only have a/b alleles (diploid)
 for f in *_paired.fa; do
   echo $f
