@@ -1,6 +1,6 @@
 # Pipeline for SRKW analysis of MHC gene diversity
-[will add more text here later] 
 
+Southern Resident killer whales (SRKW) are critically endangered residents of the Salish Sea in the Northern Pacific Ocean. Despite two decades of conservation efforts and protection under the Endangered Species Act, the SRKW population of ~75 individuals is still declining. Decreasing population size has been linked with high inbreeding and low genetic diversity of SRKW compared to other killer whale populations who have seen restoration success. As an intern under the supervision of Dr. Kim Parsons at NOAA’s Northwest Fisheries Science Center, my project aims to measure how much diversity remains in immunity genes linked to disease resistance and overall health using previously published, whole genome sequencing data. I have found that overall genetic diversity of immunity genes is lower in SRKW compared to other populations of the Northern Pacific, which may explain limited population recovery. While ongoing management practices focus on mitigating human disturbances, these results highlight intrinsic factors for SRKW health and population recovery that restoration practitioners cannot control for in small populations. 
 
 ## Pulling MHC Genes
 Extract all CDS regions from the genome so that I can annotate them.
@@ -205,8 +205,17 @@ for f in *_paired.fa; do
 done
 ```
 Haplotype network analysis in `mhc_haplotypes.R`!
-<img width="970" height="649" alt="Screenshot 2026-04-06 at 11 30 13 PM" src="https://github.com/user-attachments/assets/f86676ef-495b-4a5a-b851-8f9492823e1b" />
+<img width="1890" height="1310" alt="image" src="https://github.com/user-attachments/assets/57788b8f-1599-4c05-b47b-c586a4fcb1fc" />
 
+
+## DRB Chr11 haplotype by sire
+<img width="1926" height="1064" alt="image" src="https://github.com/user-attachments/assets/4d95e65e-908c-4a17-9fc6-2a03661305f0" />
+
+<img width="1926" height="1064" alt="image" src="https://github.com/user-attachments/assets/62931f42-1493-4f0f-b7c9-7d6ab8706c25" />
+
+## DRB Chr11 haplotype in individuals with early mortality
+<img width="1386" height="1294" alt="image" src="https://github.com/user-attachments/assets/271f2cc5-0a33-4c98-b861-8d76eb41d551" />
+Numbers in parentheses are the age of death. * = individual was sired by L41
 
 ## Identify non-synonomous mutations
 I want to do this after phasing. Can then evaluate how specific regions might carry functional changes in a population.
