@@ -214,7 +214,7 @@ Haplotype network analysis in `mhc_haplotypes.R`!
 <img width="1926" height="1064" alt="image" src="https://github.com/user-attachments/assets/62931f42-1493-4f0f-b7c9-7d6ab8706c25" />
 
 ## DRB Chr11 haplotype in individuals with early mortality
-<img width="1386" height="1294" alt="image" src="https://github.com/user-attachments/assets/271f2cc5-0a33-4c98-b861-8d76eb41d551" />
+<img width="135" height="127" alt="image" src="https://github.com/user-attachments/assets/be11a5aa-fb26-4976-bd7e-7e0b9c7b86e9" />
 Numbers in parentheses are the age of death. * = individual was sired by L41
 
 ## Identify non-synonomous mutations
