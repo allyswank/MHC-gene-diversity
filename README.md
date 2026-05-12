@@ -252,6 +252,12 @@ I then created `pos2gene.py` to take the output from `#_pi` and figure out which
 <img width="760" height="588" alt="image" src="https://github.com/user-attachments/assets/81084078-c8fd-4ead-94e5-ad10707d3463" />
 <img width="760" height="588" alt="image" src="https://github.com/user-attachments/assets/9b0b60e5-106b-4837-bfd6-a0e005bbb21b" />
 
+# Checking out the inversion noticed in the PCA
+Isolated the inversion to Chr11, so filtered `kw_151.snp.final.vcf.gz` for Chr11 around the MHC gene regions (includes DRB, DOB, DMB, DOA, DRB, DRA, and large class I gene BL3-7 alpha chain).
+Used _lostruct_ package in R to make a PCA by Chr Position as in Wooldridge et al. (2024). 
+
+
+
 
 
 
