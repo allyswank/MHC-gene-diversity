@@ -252,12 +252,32 @@ I then created `pos2gene.py` to take the output from `#_pi` and figure out which
 <img width="760" height="588" alt="image" src="https://github.com/user-attachments/assets/81084078-c8fd-4ead-94e5-ad10707d3463" />
 <img width="760" height="588" alt="image" src="https://github.com/user-attachments/assets/9b0b60e5-106b-4837-bfd6-a0e005bbb21b" />
 
-# Checking out the inversion noticed in the PCA
+# Checking out the inversion signals in the PCA
 Isolated the inversion to Chr11, so filtered `kw_151.snp.final.vcf.gz` for Chr11 around the MHC gene regions (includes DRB, DOB, DMB, DOA, DRB, DRA, and large class I gene BL3-7 alpha chain).
 Used _lostruct_ package in R to make a PCA by Chr Position as in Wooldridge et al. (2024). 
 
+# Using SnpEff to look for changes in codon sequences
 
+Here we use [SnpEff](https://pcingola.github.io/SnpEff/) to find synonomous and nonsynonomous mutations and understand their impacts on protein structural changes within and between populations.
+After downloading SnpEff source code and making sure java is running the correct version, edit the `snpEff.config` file to build a new genome database using our genome and gff file. These files should be located within the /snpEff/data/KW directory.
 
+Renamed files to match snpEff naming:
+Genome = sequences.fa
+GFF = genes.gff
+CDS fasta file = cds.fa
+Proteins fasta file = protein.fa
+
+```
+module load java/21.0.4
+
+# build the genome database with the killer whale genome
+java -jar snpEff.jar build -gff3 -v KW
+
+# have snpEff identify if mutations are synonomous or nonsynonomous
+# SnpEff should add Sequence Ontology (SO) terms to the ANN field of the output VCF. You will see synonymous_variant for synonymous changes and missense_variant for nonsynonymous changes.
+java -Xmx4g -jar snpEff.jar -v KW data/KW/mhc_ab_filtered.vcf > data/KW/annotated.vcf
+```
+Now I have a vcf file that includes information on whether a mutation is missense or nonsynonomous.
 
 
 
