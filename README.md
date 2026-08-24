@@ -279,6 +279,14 @@ java -Xmx4g -jar snpEff.jar -v KW data/KW/mhc_ab_filtered.vcf > data/KW/annotate
 ```
 Now I have a vcf file that includes information on whether a mutation is missense or nonsynonomous.
 
+```
+# Extract the mutations that result in protein sequence changes
+java -jar SnpSift.jar extractFields data/KW/annotated.vcf "CHROM" "POS" "REF" "ALT" "ANN[*].GENE" "ANN[*].EFFECT" "ANN[*].HGVS_P" "GEN[*].GT" > data/KW/genotypes_and_protein_changes.txt
+
+# Now use population data to look at frequencies of protein variants across the 4 populations
+```
+
+
 
 
 
