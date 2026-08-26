@@ -261,12 +261,6 @@ Used _lostruct_ package in R to make a PCA by Chr Position as in Wooldridge et a
 Here we use [SnpEff](https://pcingola.github.io/SnpEff/) to find synonomous and nonsynonomous mutations and understand their impacts on protein structural changes within and between populations.
 After downloading SnpEff source code and making sure java is running the correct version, edit the `snpEff.config` file to build a new genome database using our genome and gff file. These files should be located within the /snpEff/data/KW directory.
 
-Renamed files to match snpEff naming:
-Genome = sequences.fa
-GFF = genes.gff
-CDS fasta file = cds.fa
-Proteins fasta file = protein.fa
-
 ```
 module load java/21.0.4
 
@@ -277,14 +271,9 @@ java -jar snpEff.jar build -gff3 -v KW
 # SnpEff should add Sequence Ontology (SO) terms to the ANN field of the output VCF. You will see synonymous_variant for synonymous changes and missense_variant for nonsynonymous changes.
 java -Xmx4g -jar snpEff.jar -v KW data/KW/mhc_ab_filtered.vcf > data/KW/annotated.vcf
 ```
-Now I have a vcf file that includes information on whether a mutation is missense or nonsynonomous.
 
-```
-# Extract the mutations that result in protein sequence changes
-java -jar SnpSift.jar extractFields data/KW/annotated.vcf "CHROM" "POS" "REF" "ALT" "ANN[*].GENE" "ANN[*].EFFECT" "ANN[*].HGVS_P" "GEN[*].GT" > data/KW/genotypes_and_protein_changes.txt
-
-# Now use population data to look at frequencies of protein variants across the 4 populations
-```
+Now I have a vcf file that includes information on whether a mutation is missense or nonsynonomous, and I can look at variation across populations.
+Analyzing these data in `mhc_haplotypes.R`
 
 
 
