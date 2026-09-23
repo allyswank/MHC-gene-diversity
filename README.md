@@ -217,9 +217,18 @@ Haplotype network analysis in `mhc_haplotypes.R`!
 <img width="690" height="647" alt="image" src="https://github.com/user-attachments/assets/ba79554d-24a8-4e8e-bf52-8367165eacb1" />
 Numbers in parentheses are the age of death. * = individual was sired by L41
 
-## Identify non-synonomous mutations
-I want to do this after phasing. Can then evaluate how specific regions might carry functional changes in a population.
+## Identify regions under positive selection
+To calculate dN/dS, my sequences should be in-frame coding sequences (CDS). Because I merged exons, I have to be sure there are no frame-shifts.
+```
+for gene in DMB DOA DOB DRA DRB_11 DRB_15; do
+  macse -prog alignSequences -seq ${gene}_paired.fa_unique.fa -out_NT ${gene}_codon_align.fa; 
+done
+```
 
+
+ 
+
+ 
 
 ## Nucleotide diversity
 
